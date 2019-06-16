@@ -1,0 +1,70 @@
+<?php
+//echo "hola";
+
+function Capital(float $rent, float $inte, float $tiempo ){
+	$capi = $rent*((1-(1+$inte)**(-$tiempo))/$inte);
+	return $capi;
+}
+
+function Monto(float $rent, float $inte, float $tiempo){
+	$mont = $rent*((((1+$inte)**$tiempo)-1)/$inte);
+	return $mont;
+}
+
+function Renta(float $capi, float $inte, float $tiempo){
+	$rent = ($capi*$inte)/(1-(1+$inte)**(-$tiempo));
+	return $rent;
+}
+
+function Periodos(float $capi, float $inte, float $rent){
+	$x = (1/(1-(($inte*$capi)/$rent)));
+	$y = 1 + $inte;
+	$tiempo = (log($x))/(log($y));
+	return $tiempo;
+}
+
+function Interes(float $capi,float $rent, float $tiempo){
+	$x = round(($capi / $rent), 6, PHP_ROUND_HALF_UP);
+	$inte = 0.5;
+	$y = round((1-(1+$inte)**(-$tiempo))/$inte, 6, PHP_ROUND_HALF_UP);
+		if ($x > $y){
+			for ($x; $x > $y;){
+			$inte -= 0.000001;
+			$y = round((1-(1+$inte)**(-$tiempo))/$inte, 6, PHP_ROUND_HALF_UP);
+			} 
+		} elseif ($x < $y){
+			for ($x; $x < $y;){
+			$inte += 0.000001;
+			$y = round((1-(1+$inte)**(-$tiempo))/$inte, 6, PHP_ROUND_HALF_UP);
+			} 
+	
+			}
+		return $inte;	
+		}
+
+
+function InteresM(float $mont,float $rent, float $tiempo){
+	$x = round(($mont / $rent), 4, PHP_ROUND_HALF_UP);
+	$inte = 0.5;
+	$y = round(((1+$inte)**($tiempo)-1)/$inte, 4, PHP_ROUND_HALF_UP);
+		if ($x > $y){
+			for ($x; $x > $y;$inte += 0.000001){
+			
+			$y = round(((1+$inte)**($tiempo)-1)/$inte, 4, PHP_ROUND_HALF_UP);
+			} }
+			elseif ($x < $y){
+			for ($x; $x < $y;$inte -= 0.000001){
+			
+			$y = round(((1+$inte)**($tiempo)-1)/$inte, 4, PHP_ROUND_HALF_UP);
+			} 
+	
+			}
+			echo  $inte . "<br>";
+			echo  $y . "<br>";
+			echo  $x . "<br>";
+			return $inte;
+		}
+
+
+echo round(Interes(6000,150,48), 6, PHP_ROUND_HALF_UP) * 100;
+?>
